@@ -2,12 +2,11 @@ This is an application home assessment for and interview the following will be s
 
 ## Getting Started
 First install the required packages(node_modules): 
-```
-```
-```bash 
-
+ 
+```bash
 npm install
 ```
+
 
 First, run the development server:
 

@@ -1,3 +1,5 @@
+import ProjectBoard from "./components/ProjectBoard";
+import { mockProjectsData } from "./lib/mockProjectData";
 
 export default function Home() {
   return (
@@ -8,7 +10,7 @@ export default function Home() {
       <p className="mt-2 text-gray-600">
         Project management dashboard
       </p>
-
+      <ProjectBoard projects={mockProjectsData} />
     </main>
   );
 }
