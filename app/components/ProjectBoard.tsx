@@ -1,10 +1,11 @@
 import { Project } from "../src/types/project";
 
 interface Props {
-  projects: Project[]
+  projects: Project[];
+  onEdit: (project: Project) => void;
 }
 //Project Board Component that renders mock data 
-export default function ProjectBoard({ projects }: Props) {
+export default function ProjectBoard({ projects, onEdit }: Props) {
   return (
     <div className="mt-6 overflow-x-auto">
       <table className="min-w-full border border-gray-200">
@@ -26,6 +27,13 @@ export default function ProjectBoard({ projects }: Props) {
               <td className="px-4 py-2">{project.deadline}</td>
               <td className="px-4 py-2">{project.assignedTo}</td>
               <td className="px-4 py-2">{project.budget}</td>
+              <td className="px-4 py-2">
+                <button onClick={() => onEdit(project)}
+                  className="text-blue-600 hover:underline" >
+                  Edit
+                </button>
+              </td>
+
             </tr>
           ))}
         </tbody>
