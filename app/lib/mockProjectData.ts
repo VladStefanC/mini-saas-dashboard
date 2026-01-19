@@ -1,6 +1,6 @@
 import { Project } from "../src/types/project";
-
-export const mockProjectsData: Project[] = [
+// let insted of const becaseu this will mock CRUD operation until database is set 
+export let mockProjectsData: Project[] = [
   {
     id: '1',
     name: "Website Redesign",
