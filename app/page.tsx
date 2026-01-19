@@ -4,6 +4,7 @@ import ProjectBoard from "./components/ProjectBoard";
 import { useState, useEffect } from "react";
 import { Project } from "./src/types/project";
 import Modal from "./components/Modal";
+import ProjectForm from "./components/ProjectForm";
 
 export default function Home() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -21,6 +22,16 @@ export default function Home() {
     fetchProjects();
   }, []);
 
+  async function saveNewProject(data: Omit<Project, "id">) {
+    await fetch("api/projects", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    })
+
+    setIsModalOpen(false);
+    fetchProjects();
+  }
 
 
 
@@ -42,10 +53,11 @@ export default function Home() {
       <Modal
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title="Add Project">
-        <p className="text-gray-600">
-          Form will go here
-        </p>
+        title="Add Project"
+      >
+        <div className="bg-gray-900 border-0 rounded-lg p-8 shadow-lg">
+          <ProjectForm onSubmit={saveNewProject} />
+        </div>
       </Modal>
     </main>
   );
