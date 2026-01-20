@@ -17,7 +17,7 @@ export default function Home() {
   }, []);
 
   async function saveNewProject(data: Omit<Project, "id">) {
-    await fetch("api/projects", {
+    await fetch("/api/projects", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
@@ -28,7 +28,7 @@ export default function Home() {
   }
 
   async function fetchProjects() {
-    const res = await fetch("api/projects");
+    const res = await fetch("/api/projects");
     const data = await res.json();
     setProjects(data);
     setIsLoading(false)
@@ -40,7 +40,7 @@ export default function Home() {
       await fetch(`/api/projects/${selectedProject.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data, id: selectedProject.id }),
+        body: JSON.stringify(data),
 
       });
 
@@ -53,6 +53,24 @@ export default function Home() {
     }
     setIsModalOpen(false)
     setSelectedProject(null)
+    fetchProjects();
+  }
+
+  async function deleteProject(id: string) {
+    const confirmed = confirm(
+      "Are you sure you want to delete this project ?"
+    );
+
+    if (!confirmed) return;
+
+    const res = await fetch(`/api/projects/${id}`, {
+      method: "DELETE",
+    });
+
+    if (!res.ok) {
+      alert("Failed to delete project");
+    }
+
     fetchProjects();
   }
 
@@ -81,20 +99,25 @@ export default function Home() {
           setSelectedProject(projects);
           setIsModalOpen(true)
         }
-
-        } />)}
+        }
+          onDelete={deleteProject} />
+        )}
       <Modal
         open={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title="Add Project"
+        onClose={() => {
+          setIsModalOpen(false);
+          setSelectedProject(null);
+
+        }}
+        title={selectedProject ? "Edit Project" : "Add Project"}
       >
         <div className="bg-gray-900 border-0 rounded-lg p-8 shadow-lg">
           <ProjectForm
             initialData={selectedProject ?? undefined}
-            onSubmit={editProjects}
+            onSubmit={selectedProject ? editProjects : saveNewProject}
           />
         </div>
       </Modal>
-    </main>
+    </main >
   );
 }

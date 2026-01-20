@@ -3,37 +3,44 @@ import { Project } from "../src/types/project";
 interface Props {
   projects: Project[];
   onEdit: (project: Project) => void;
+  onDelete: (id: string) => void;
 }
 //Project Board Component that renders mock data 
-export default function ProjectBoard({ projects, onEdit }: Props) {
+export default function ProjectBoard({ projects, onEdit, onDelete }: Props) {
   return (
-    <div className="mt-6 overflow-x-auto">
-      <table className="min-w-full border border-gray-200">
-        <thead className="bg-orange-400">
+    <div className="mt-6 overflow-hidden rounded-lg border border-gray-200 bg-white">
+      <table className="min-w-full text-sm">
+        <thead className="bg-gray-50 text-gray-600">
           <tr>
-            <th className="px-4 py-2 text-left font-bold">Name</th>
-            <th className="px-4 py-2 text-left font-bold">Status</th>
-            <th className="px-4 py-2 text-left font-bold">Deadline</th>
-            <th className="px-4 py-2 text-left font-bold">Assigned</th>
-            <th className="px-4 py-2 text-left font-bold">Budget</th>
+            <th className="px-4 py-3 text-left font-medium">Name</th>
+            <th className="px-4 py-3 text-left font-medium">Status</th>
+            <th className="px-4 py-3 text-left font-medium">Deadline</th>
+            <th className="px-4 py-3 text-left font-medium">Assigned</th>
+            <th className="px-4 py-3 text-left font-medium">Budget</th>
           </tr>
         </thead>
         {/* Mapping over the data and creating new rows for each element  */}
-        <tbody>
+        <tbody className="divide-y divide-gray-100">
           {projects.map((project) => (
-            <tr key={project.id} className="border-t">
-              <td className="px-4 py-2">{project.name}</td>
-              <td className="px-4 py-2 capitalize">{project.status.replace("_", " ")}</td>
-              <td className="px-4 py-2">{project.deadline}</td>
-              <td className="px-4 py-2">{project.assignedTo}</td>
-              <td className="px-4 py-2">{project.budget}</td>
-              <td className="px-4 py-2">
-                <button onClick={() => onEdit(project)}
-                  className="text-blue-600 hover:underline" >
-                  Edit
-                </button>
+            <tr key={project.id} className="group hover:bg-gray-50 transition-colors ">
+              <td className="px-4 py-3 font-medium text-gray-900">{project.name}</td>
+              <td className="px-4 py-3">
+                <span className="rounded-full bg-gray-100 px-2 py-1 text-xs text-gray-600">{project.status.replace("_", " ")}</span>
               </td>
-
+              <td className="px-4 py-3 font-medium text-gray-900">{project.deadline}</td>
+              <td className="px-4 py-3 font-medium text-gray-900">{project.assignedTo}</td>
+              <td className="px-4 py-3 font-medium text-gray-900">{project.budget}</td>
+              <td className="px-4 py-3 text-right">
+                <div className="flex justify-center gap-3 opacity-50 group-hover:opacity-100 transition-opacity">
+                  <button onClick={() => onEdit(project)}
+                    className="text-gray-500 hover:text-blue-600" >
+                    Edit
+                  </button>
+                  <button onClick={() => onDelete(project.id)} className="text-gray-500 hover:text-red-600">
+                    Delete
+                  </button>
+                </div>
+              </td>
             </tr>
           ))}
         </tbody>
