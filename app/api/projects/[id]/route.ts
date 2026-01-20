@@ -1,44 +1,43 @@
 import { NextResponse } from "next/server";
-import { mockProjectsData } from "@/app/lib/mockProjectData";
+import { supabase } from "@/app/lib/supabase";
 
-
-export async function PUT(req: Request, context: { params: Promise<{ id: string }> }
+export async function PUT(
+  req: Request,
+  context: { params: Promise<{ id: string }> }
 ) {
   const { id } = await context.params;
   const body = await req.json();
 
-  const index = mockProjectsData.findIndex((p) => p.id === id);
-
-  if (index === -1) {
-    return NextResponse.json(
-      { message: "Project not found" },
-      { status: 404 }
-    );
+  const payload = {
+    name: body.name,
+    status: body.status,
+    deadline: body.deadline,
+    assigned_to: body.assignedTo,
+    budget: body.budget,
   }
 
-  mockProjectsData[index] = {
-    ...mockProjectsData[index],
-    ...body,
-  };
+  const { data, error } = await supabase
+    .from("projects")
+    .update(payload)
+    .eq("id", id)
+    .select()
+    .single();
 
-  return NextResponse.json(mockProjectsData[index]);
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  return NextResponse.json(data);
 }
 
-export async function DELETE(
-  _req: Request,
-  context: { params: Promise<{ id: string }> }
-) {
+
+export async function DELETE(_req: Request, context: { params: Promise<{ id: string }> }) {
   const { id } = await context.params;
 
-  const index = mockProjectsData.findIndex((p) => p.id === id);
+  const { error } = await supabase.from("projects").delete().eq("id", id);
 
-  if (index === -1) {
-    return NextResponse.json(
-      { message: "Project not found" },
-      { status: 404 }
-    );
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 })
   }
-
-  const deleted = mockProjectsData.splice(index, 1);
-  return NextResponse.json(deleted[0]);
+  return NextResponse.json({ succes: true })
 }

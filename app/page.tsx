@@ -5,8 +5,7 @@ import { useState, useEffect } from "react";
 import { Project } from "./src/types/project";
 import Modal from "./components/Modal";
 import ProjectForm from "./components/ProjectForm";
-import { mockProjectsData } from "./lib/mockProjectData";
-
+import { getProjects, createProject, updateProject, deleteProject } from "./lib/projectsApi"
 export default function Home() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -19,65 +18,34 @@ export default function Home() {
     fetchProjects();
   }, []);
 
-  async function saveNewProject(data: Omit<Project, "id">) {
-    await fetch("/api/projects", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
-    })
+  async function fetchProjects() {
+    const data = await getProjects();
+    setProjects(data);
+    setIsLoading(false);
+  }
 
+  async function handleCreateProject(data: Omit<Project, "id">) {
+    await createProject(data);
     setIsModalOpen(false);
     fetchProjects();
   }
 
-  async function fetchProjects() {
-    const res = await fetch("/api/projects");
-    const data = await res.json();
-    setProjects(data);
-    setIsLoading(false)
 
-  }
+  async function handleUpdateProject(data: Omit<Project, "id">) {
+    if (!selectedProject) return;
 
-  async function editProjects(data: Omit<Project, "id">) {
-    if (selectedProject) {
-      await fetch(`/api/projects/${selectedProject.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-
-      });
-
-    } else {
-      await fetch("/api/projects", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-    }
-    setIsModalOpen(false)
-    setSelectedProject(null)
+    await updateProject(selectedProject.id, data);
+    setSelectedProject(null);
+    setIsModalOpen(false);
     fetchProjects();
   }
 
-  async function deleteProject(id: string) {
-    const confirmed = confirm(
-      "Are you sure you want to delete this project ?"
-    );
-
-    if (!confirmed) return;
-
-    const res = await fetch(`/api/projects/${id}`, {
-      method: "DELETE",
-    });
-
-    if (!res.ok) {
-      alert("Failed to delete project");
-    }
-
-    fetchProjects();
+  async function handleDeleteProject(id: string) {
+    await deleteProject(id);
+    fetchProjects()
   }
 
-  const filteredProjects = mockProjectsData.filter((project) => {
+  const filteredProjects = projects.filter((project) => {
     const matchSearches = project.name.toLowerCase().includes(searchTerm.toLowerCase())
 
     const matchesStatus = statusFilter === "all" || project.status === statusFilter;
@@ -127,7 +95,7 @@ export default function Home() {
           setIsModalOpen(true)
         }
         }
-          onDelete={deleteProject} />
+          onDelete={handleDeleteProject} />
         )}
       <Modal
         open={isModalOpen}
@@ -141,7 +109,7 @@ export default function Home() {
         <div className="bg-gray-900 border-0 rounded-lg p-8 shadow-lg">
           <ProjectForm
             initialData={selectedProject ?? undefined}
-            onSubmit={selectedProject ? editProjects : saveNewProject}
+            onSubmit={selectedProject ? handleUpdateProject : handleCreateProject}
           />
         </div>
       </Modal>

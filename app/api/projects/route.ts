@@ -1,27 +1,33 @@
 import { NextResponse } from "next/server"
-import { mockProjectsData } from "@/app/lib/mockProjectData"
-import { Project } from "@/app/src/types/project";
+import { supabase } from "@/app/lib/supabase"
 
 export async function GET() {
-  return NextResponse.json(mockProjectsData)
+  const { data, error } = await supabase.from("projects").select("*").order("created_at", { ascending: false })
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 })
+  }
+
+  return NextResponse.json(data);
+
 }
 
 export async function POST(req: Request) {
-  try {
-    const body = await req.json();
-
-    const newProject: Project = {
-      id: crypto.randomUUID(),
-      ...body,
-    };
-
-    mockProjectsData.push(newProject)
-    return NextResponse.json(newProject, { status: 201 });
-  } catch (err) {
-    throw new Error(`POST REQEUST: ${err}`)
-
+  const body = await req.json()
+  console.log(body)
+  const payload = {
+    name: body.name,
+    status: body.status,
+    deadline: body.deadline,
+    assigned_to: body.assignedTo,
+    budget: body.budget,
   }
-};
+  const { data, error } = await supabase.from("projects").insert(payload).select().single();
 
+  if (error) {
+    console.error("POST /projects error:", error)
+    return NextResponse.json({ error: error.message }, { status: 505 })
+  }
 
+  return NextResponse.json(data, { status: 201 })
 
+}
