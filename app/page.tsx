@@ -5,12 +5,15 @@ import { useState, useEffect } from "react";
 import { Project } from "./src/types/project";
 import Modal from "./components/Modal";
 import ProjectForm from "./components/ProjectForm";
+import { mockProjectsData } from "./lib/mockProjectData";
 
 export default function Home() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState<"all" | Project["status"]>("all");
 
   useEffect(() => {
     fetchProjects();
@@ -74,6 +77,12 @@ export default function Home() {
     fetchProjects();
   }
 
+  const filteredProjects = mockProjectsData.filter((project) => {
+    const matchSearches = project.name.toLowerCase().includes(searchTerm.toLowerCase())
+
+    const matchesStatus = statusFilter === "all" || project.status === statusFilter;
+    return matchSearches && matchesStatus
+  })
 
   return (
     <main className="p-8">
@@ -93,9 +102,27 @@ export default function Home() {
       <p className="mt-2 text-gray-600">
         Project Management Dashboard
       </p>
+      <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
+        <input
+          type="text"
+          placeholder="Search projects..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full sm:w-64 rounded border px-3 py-2"
+        />
+        <select value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value as typeof statusFilter)}
+          className="w-full sm:w-64 rounded border px-3 py-2"
+        >
+          <option value="all">All statuses</option>
+          <option value="active">Active</option>
+          <option value="on_hold">On Hold</option>
+          <option value="completed">Completed</option>
+        </select>
+      </div>
       {isLoading ? (<p className="mt-6">Loading projects...</p>)
         :
-        (<ProjectBoard projects={projects} onEdit={(projects) => {
+        (<ProjectBoard projects={filteredProjects} onEdit={(projects) => {
           setSelectedProject(projects);
           setIsModalOpen(true)
         }
