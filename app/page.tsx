@@ -6,6 +6,7 @@ import { Project } from "./src/types/project";
 import Modal from "./components/Modal";
 import ProjectForm from "./components/ProjectForm";
 import { getProjects, createProject, updateProject, deleteProject } from "./lib/projectsApi"
+
 export default function Home() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -44,6 +45,7 @@ export default function Home() {
     await deleteProject(id);
     fetchProjects()
   }
+
 
   const filteredProjects = projects.filter((project) => {
     const matchSearches = project.name.toLowerCase().includes(searchTerm.toLowerCase())

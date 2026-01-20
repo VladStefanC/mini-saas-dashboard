@@ -5,8 +5,14 @@ interface Props {
   onEdit: (project: Project) => void;
   onDelete: (id: string) => void;
 }
+
 //Project Board Component that renders mock data 
 export default function ProjectBoard({ projects, onEdit, onDelete }: Props) {
+  const mappedProjects = projects.map(project => ({
+    ...project,
+    assignedTo: project.assigned_to,
+  }));
+
   return (
     <div className="mt-6 overflow-hidden rounded-lg border border-gray-200 bg-white">
       <table className="min-w-full text-sm">
@@ -21,7 +27,7 @@ export default function ProjectBoard({ projects, onEdit, onDelete }: Props) {
         </thead>
         {/* Mapping over the data and creating new rows for each element  */}
         <tbody className="divide-y divide-gray-100">
-          {projects.map((project) => (
+          {mappedProjects.map((project) => (
             <tr key={project.id} className="group hover:bg-gray-50 transition-colors ">
               <td className="px-4 py-3 font-medium text-gray-900">{project.name}</td>
               <td className="px-4 py-3">

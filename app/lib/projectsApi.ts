@@ -2,6 +2,7 @@ import { Project } from "../src/types/project";
 
 export async function getProjects(): Promise<Project[]> {
   const res = await fetch("/api/projects");
+
   return res.json();
 }
 

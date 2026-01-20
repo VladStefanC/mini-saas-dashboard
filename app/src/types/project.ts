@@ -5,6 +5,6 @@ export interface Project {
   name: string;
   status: ProjectStatus;
   deadline: string; // Date 
-  assignedTo: string;
+  assigned_to: string;
   budget: number;
 }
