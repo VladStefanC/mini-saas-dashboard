@@ -63,24 +63,24 @@ export default function Home() {
         </p>
       </div>
       <div className="w-full max-w-4xl p-2 sm:p-8 bg-gray-900 rounded-xl shadow-md space-y-4 sm:space-y-8 border border-yellow-150 flex flex-col items-center">
-        <input
-          type="text"
-          placeholder="Search projects..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full sm:w-64 rounded bg-gray-50 px-3 py-2"
-        />
-        <select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value as typeof statusFilter)}
-          className="w-full sm:w-64 rounded border-t-amber-600 bg-gray-50 px-3 py-2"
-        >
-          <option value="all">All statuses</option>
-          <option value="active">Active</option>
-          <option value="on_hold">On Hold</option>
-          <option value="completed">Completed</option>
-        </select>
-        <div className="w-full flex justify-center">
+        <div className="w-full flex flex-col sm:flex-row gap-4 items-center">
+          <input
+            type="text"
+            placeholder="Search projects..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full sm:flex-1 rounded bg-gray-50 px-3 py-2"
+          />
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value as typeof statusFilter)}
+            className="w-full sm:w-auto rounded border-t-amber-600 bg-gray-50 px-3 py-2"
+          >
+            <option value="all">All statuses</option>
+            <option value="active">Active</option>
+            <option value="on_hold">On Hold</option>
+            <option value="completed">Completed</option>
+          </select>
           <button
             onClick={() => {
               setSelectedProject(null);
