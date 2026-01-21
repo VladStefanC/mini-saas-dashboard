@@ -25,7 +25,7 @@ export default function ProjectForm({ initialData = {}, onSubmit }: Props) {
       name,
       status,
       deadline,
-      assignedTo,
+      assigned_to: assignedTo,
       budget,
     });
 
@@ -64,7 +64,7 @@ export default function ProjectForm({ initialData = {}, onSubmit }: Props) {
 
       <label className="block text-sm font-medium text-gray-200 mb-1">Assigned To</label>
       <input
-        type="Assigned To"
+        type="text"
         className="w-full rounded bg-gray-50 border-gray-100 px-3 py-2 "
         value={assignedTo}
         onChange={(e) => setAssignedTo(e.target.value)}
