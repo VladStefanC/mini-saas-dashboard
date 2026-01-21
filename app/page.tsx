@@ -55,66 +55,67 @@ export default function Home() {
   })
 
   return (
-    <main className="p-8">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Mini SaaS Dashboard</h1>
-        <button
-          onClick={() => {
-            setSelectedProject(null);
-            setIsModalOpen(true);
-          }}
-          className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-        >
-          + Add Project
-        </button>
-
+    <main className="min-h-screen bg-gray-950 flex flex-col items-center justify-start gap-y-4 pt-26 px-2">
+      <div className="w-full max-w-4xl p-2 sm:p-8 bg-gray-900 rounded-xl shadow-md space-y-4 sm:space-y-8 border border-yellow-150 flex flex-col items-center">
+        <h3 className="text-2xl sm:text-3xl font-semibold text-gray-50 font-serif text-center">Mini SaaS Dashboard</h3>
+        <p className="mt-2 text-gray-50 font-extralight text-center text-sm sm:text-base">
+          Simple dashboard to track project progress, deadlines and who is in charge. Also the costs.
+        </p>
       </div>
-      <p className="mt-2 text-gray-600">
-        Project Management Dashboard
-      </p>
-      <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
+      <div className="w-full max-w-4xl p-2 sm:p-8 bg-gray-900 rounded-xl shadow-md space-y-4 sm:space-y-8 border border-yellow-150 flex flex-col items-center">
         <input
           type="text"
           placeholder="Search projects..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full sm:w-64 rounded border px-3 py-2"
+          className="w-full sm:w-64 rounded bg-gray-50 px-3 py-2"
         />
-        <select value={statusFilter}
+        <select
+          value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value as typeof statusFilter)}
-          className="w-full sm:w-64 rounded border px-3 py-2"
+          className="w-full sm:w-64 rounded border-t-amber-600 bg-gray-50 px-3 py-2"
         >
           <option value="all">All statuses</option>
           <option value="active">Active</option>
           <option value="on_hold">On Hold</option>
           <option value="completed">Completed</option>
         </select>
+        <div className="w-full flex justify-center">
+          <button
+            onClick={() => {
+              setSelectedProject(null);
+              setIsModalOpen(true);
+            }}
+            className="rounded bg-orange-500 px-4 py-2 text-white hover:bg-orange-400 w-full sm:w-auto"
+          >
+            + Add Project
+          </button>
+        </div>
       </div>
-      {isLoading ? (<p className="mt-6">Loading projects...</p>)
-        :
-        (<ProjectBoard projects={filteredProjects} onEdit={(projects) => {
+      {isLoading ? (
+        <p className="mt-6">Loading projects...</p>
+      ) : (
+        <ProjectBoard projects={filteredProjects} onEdit={(projects) => {
           setSelectedProject(projects);
           setIsModalOpen(true)
-        }
-        }
+        }}
           onDelete={handleDeleteProject} />
-        )}
+      )}
       <Modal
         open={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);
           setSelectedProject(null);
-
         }}
         title={selectedProject ? "Edit Project" : "Add Project"}
       >
-        <div className="bg-gray-900 border-0 rounded-lg p-8 shadow-lg">
+        <div className="w-full max-w-3xl bg-gray-900 rounded-lg">
           <ProjectForm
             initialData={selectedProject ?? undefined}
             onSubmit={selectedProject ? handleUpdateProject : handleCreateProject}
           />
         </div>
       </Modal>
-    </main >
+    </main>
   );
 }
