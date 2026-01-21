@@ -16,16 +16,15 @@ export default function ProjectForm({ initialData = {}, onSubmit }: Props) {
   const [name, setName] = useState(initialData.name || "");
   const [status, setStatus] = useState<ProjectStatus>(initialData.status || "active");
   const [deadline, setDeadLine] = useState(initialData.deadline || "");
-  const [assignedTo, setAssignedTo] = useState(initialData.assigned_to || "");
+  const [assignedTo, setAssignedTo] = useState(initialData.assignedTo || "");
   const [budget, setBudget] = useState(initialData.budget || 0);
-  console.log(initialData)
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     onSubmit({
       name,
       status,
       deadline,
-      assigned_to: assignedTo,
+      assignedTo,
       budget,
     });
 

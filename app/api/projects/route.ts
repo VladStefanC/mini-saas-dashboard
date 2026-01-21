@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     name: body.name,
     status: body.status,
     deadline: body.deadline,
-    assigned_to: body.assignedTo,
+    assignedTo: body.assignedTo,
     budget: body.budget,
   }
   const { data, error } = await supabase.from("projects").insert(payload).select().single();

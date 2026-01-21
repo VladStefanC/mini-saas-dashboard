@@ -8,15 +8,12 @@ interface Props {
 
 //Project Board Component that renders mock data 
 export default function ProjectBoard({ projects, onEdit, onDelete }: Props) {
-  const mappedProjects = projects.map(project => ({
-    ...project,
-    // assignedTo: project.assigned_to,
-  }));
+  const mappedProjects = projects;
   // This doesnt look the greatest on small screens(Im sorry) 
   return (
     <div className="w-full max-w-4xl p-2 sm:p-8 bg-gray-900 rounded-xl shadow-md space-y-4 sm:space-y-8 border border-yellow-150 flex flex-col items-center">
       <div className="w-full overflow-x-auto -mx-2 px-2">
-        <table className="min-w-[600px] w-full text-xs sm:text-sm">
+        <table className="min-w-150 w-full text-xs sm:text-sm">
           <thead className="bg-gray-900 text-gray-50">
             <tr>
               <th className="px-2 sm:px-3 py-2 text-left font-medium">Name</th>
@@ -30,7 +27,7 @@ export default function ProjectBoard({ projects, onEdit, onDelete }: Props) {
           <tbody className="divide-y divide-gray-100">
             {mappedProjects.map((project) => (
               <tr key={project.id} className="group hover:bg-gray-600 rounded-full border-gray-100 opacity-100 transition-colors ">
-                <td className="px-2 sm:px-3 py-2 font-medium text-gray-50 truncate max-w-[120px]">{project.name}</td>
+                <td className="px-2 sm:px-3 py-2 font-medium text-gray-50 truncate max-w-30">{project.name}</td>
                 <td className="px-2 sm:px-3 py-2">
                   <span className={`rounded-full px-2 py-1 text-xs text-gray-50 whitespace-nowrap
                 ${project.status.includes("active")
@@ -44,7 +41,7 @@ export default function ProjectBoard({ projects, onEdit, onDelete }: Props) {
                   </span>
                 </td>
                 <td className="px-2 sm:px-3 py-2 font-medium text-gray-50 whitespace-nowrap">{project.deadline}</td>
-                <td className="px-2 sm:px-3 py-2 font-medium text-gray-50 truncate max-w-[100px]">{project.assigned_to}</td>
+                <td className="px-2 sm:px-3 py-2 font-medium text-gray-50 truncate max-w-25">{project.assignedTo}</td>
                 <td className="px-2 sm:px-3 py-2 font-medium text-gray-50 whitespace-nowrap">${project.budget}</td>
                 <td className="px-2 sm:px-3 py-2 text-right">
                   <div className="flex flex-row gap-1.5 sm:opacity-20 sm:group-hover:opacity-100 transition-opacity">

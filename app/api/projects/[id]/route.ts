@@ -12,7 +12,7 @@ export async function PUT(
     name: body.name,
     status: body.status,
     deadline: body.deadline,
-    assigned_to: body.assignedTo,
+    assignedTo: body.assignedTo,
     budget: body.budget,
   }
 
