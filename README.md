@@ -24,11 +24,10 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 # Note
 
 If you wanna build this on local machine you'll need to create a supabase database and create and .env file to connect to it.
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
 ## Deploy on Vercel
 
-The Project is live here : <https://mini-saas-dashboard-snowy.vercel.app/com>
+The Project is live here : <https://mini-saas-dashboard-git-main-vladstefancs-projects.vercel.app/>
 
 ## Database
 
